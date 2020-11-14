@@ -11,6 +11,11 @@
 在上面的两个使用中tf2_cnn_seq.py 的训练速度更快！
 '''
 
+3. tf2_cnn_dataset.py 是在 tf2_cnn.py 的基础上，使用tf.data.Dataset类来处理数据。当进行多线程处理时，确实比用 data_loader.get_batch(batch_size) 更快。.prefetch(4)=46.316秒，而使用.get_batch用时67.282秒。
+
+'''
+以上实验设备：i7-9700K，2080Ti
+'''
 
 
 
