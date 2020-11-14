@@ -13,7 +13,7 @@
 
 3. tf2_cnn_dataset.py 是在 tf2_cnn.py 的基础上，使用tf.data.Dataset类来处理数据。当进行多线程处理时，确实比用 data_loader.get_batch(batch_size) 更快。.prefetch(4)=46.316秒，而使用.get_batch用时67.282秒。
 
-4. tf2_cnn_dataset.py 是在Eager模式下的，对于每个batch数据的提取可用使用
+4. tf2_cnn_dataset.py 是在**Eager模式**下的，对于每个batch数据的提取可用使用
 
 ```python
     for step, (image_batch, label_batch) in enumerate(mnist_dataset):  # 迭代数据集对象，带step参数
@@ -22,6 +22,19 @@
     
     for image_batch, label_batch in mnist_dataset:
 ```
+
+5. 当在**非Eager模式**下时，读取dataset类中batch的方法为。如果使用.repeat()方法设置epoch数，最好写成.repeat(epoch+1)，避免最后一个epoch报错。.repeat()在.shuffle()之后。
+
+```python
+    mnist_dataset = tf.data.Dataset.from_tensor_slices((train_data, train_label))\
+    .shuffle(buffer_size=10000).batch(batch_size=batch_size).prefetch(4)
+    iterator = mnist_dataset.make_one_shot_iterator()  # 从dataset中实例化一个Iterator
+    image_batch, label_batch = iterator.get_next()
+    
+    sess = tf.Session()
+    batch_images = sess.ren(image_batch)
+```
+
 
 ```
 以上实验设备：i7-9700K，2080Ti
