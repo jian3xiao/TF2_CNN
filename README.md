@@ -7,15 +7,26 @@
 
 2. tf2_cnn_seq.py 使用keras的序列化(Sequential)API建立模型，通过向 tf.keras.models.Sequential() 提供一个层的列表，就能快速地建立一个 tf.keras.Model 模型。不过，这种层叠结构并不能表示任意的神经网络结构。
 
-'''
+```
 在上面的两个使用中tf2_cnn_seq.py 的训练速度更快！
-'''
+```
 
 3. tf2_cnn_dataset.py 是在 tf2_cnn.py 的基础上，使用tf.data.Dataset类来处理数据。当进行多线程处理时，确实比用 data_loader.get_batch(batch_size) 更快。.prefetch(4)=46.316秒，而使用.get_batch用时67.282秒。
 
-'''
+4. tf2_cnn_dataset.py 是在Eager模式下的，对于每个batch数据的提取可用使用
+
+```python
+    for step, (image_batch, label_batch) in enumerate(mnist_dataset):  # 迭代数据集对象，带step参数
+
+或者
+    
+    for image_batch, label_batch in mnist_dataset:
+```
+
+```
 以上实验设备：i7-9700K，2080Ti
-'''
+```
+
 
 
 
